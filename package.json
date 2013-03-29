@@ -1,0 +1,57 @@
+{
+  "name": "grunt-bless",
+  "description": "Split CSS files suitable for IE",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Ponginae/grunt-bless",
+  "author": {
+    "name": "Aki Alexandra Nofftz",
+    "email": "aki@nofftz.name"
+  },
+  "contributors": [
+    {
+      "name": "Aaron Spaulding",
+      "email": "aaron@sachimp.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ponginae/grunt-bless"
+  },
+  "bugs": {
+    "url": "https://github.com/Ponginae/grunt-bless/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Ponginae/grunt-bless/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "bless": "~3.0.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin",
+    "bless",
+    "blessjs",
+    "css",
+    "IE",
+    "Internet Explorer",
+    "4095",
+    "31"
+  ]
+}
