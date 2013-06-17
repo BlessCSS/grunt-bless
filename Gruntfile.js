@@ -32,8 +32,8 @@ module.exports = function(grunt) {
       default_options: {
         options: {},
         files: {
-          'tmp/above-limit.css': 'test/input/above-limit.css',
-        },
+          'tmp/above-limit.css': 'test/input/above-limit.css'
+        }
       },
       custom_options: {
         options: {
@@ -41,9 +41,9 @@ module.exports = function(grunt) {
           compress: true
         },
         files: {
-          'tmp/below-limit.css': 'test/input/below-limit.css',
-        },
-      },
+          'tmp/below-limit.css': 'test/input/below-limit.css'
+        }
+      }
     }
   });
 

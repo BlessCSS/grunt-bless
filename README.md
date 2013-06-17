@@ -1,7 +1,7 @@
 grunt-bless
 ===========
 
-A grunt module for [Blessing](http://blesscss.com/) your CSS files so the will work in Internet Explorer. This is based on a [pull request](https://github.com/paulyoung/bless.js/pull/11) by Aki Alexandra Nofftz (@akinofftz).
+A grunt module for [Blessing](http://blesscss.com/) your CSS files so they will work in Internet Explorer. This is based on a [pull request](https://github.com/paulyoung/bless.js/pull/11) by Aki Alexandra Nofftz (@akinofftz).
 
 Getting Started
 ---------------
@@ -30,13 +30,15 @@ In your project's Gruntfile, add a section named `bless` to the data object pass
 ```js
 grunt.initConfig({
   bless: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
+    css: {
+      options: {
+        // Task-specific options go here.
+      },
+      your_target: {
+        // Target-specific file lists and/or options go here.
+      }
+    }
+  }
 })
 ```
 
@@ -86,11 +88,13 @@ The default options will split the files and add a cache-buster paramter. Just a
 ```js
 grunt.initConfig({
   bless: {
-    options: {},
-    files: {
-      'tmp/above-limit.css': 'test/input/above-limit.css',
+    css: {
+      options: {},
+      files: {
+        'tmp/above-limit.css': 'test/input/above-limit.css'
+      }
     }
-  },
+  }
 })
 ```
 
@@ -101,14 +105,16 @@ You can set any option allowed by bless.
 ```js
 grunt.initConfig({
   bless: {
-    options: {
-      cacheBuster: false,
-      compress: true
-    },
-    files: {
-      'tmp/below-limit.css': 'test/input/below-limit.css',
+    css: {
+      options: {
+        cacheBuster: false,
+        compress: true
+      },
+      files: {
+        'tmp/below-limit.css': 'test/input/below-limit.css'
+      }
     }
-  },
+  }
 })
 ```
 
@@ -120,4 +126,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
+- **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz

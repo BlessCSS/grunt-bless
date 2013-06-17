@@ -1,7 +1,7 @@
 {
   "name": "grunt-bless",
   "description": "Split CSS files suitable for IE",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Ponginae/grunt-bless",
   "author": {
     "name": "Aki Alexandra Nofftz",
