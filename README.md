@@ -70,7 +70,8 @@ Override the Grunt option for this task.
 Type: `Boolean`
 Default value: `true`
 
-Enable or disable the use of `@import` in generated CSS files.
+Enable or disable the use of `@import` in generated CSS files. This feature was
+added in bless.js 3.0.3.
 
 #### options.cacheBuster ####
 
@@ -126,5 +127,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
+- **Next** Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
 - **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz
