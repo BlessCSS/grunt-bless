@@ -86,7 +86,7 @@ Add or remove a cache-buster parameter from the generated CSS files.
 
 #### Default Options ####
 
-The default options will split the files and add a cache-buster paramter. Just as the defaults for `blessc` are.
+The default options will split the files and add a cache-buster parameter. Just as the defaults for `blessc` are.
 
 ```js
 grunt.initConfig({
