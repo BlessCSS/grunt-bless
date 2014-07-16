@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    pkg: grunt.file.readJSON( "package.json" ),
     jshint: {
       all: [
         'Gruntfile.js',
@@ -37,6 +38,7 @@ module.exports = function(grunt) {
       },
       custom_options: {
         options: {
+          banner: '/* This file has been blessed by <%= pkg.name %> v<%= pkg.version %> */',
           cacheBuster: false,
           compress: true
         },

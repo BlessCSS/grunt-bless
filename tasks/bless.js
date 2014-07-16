@@ -9,7 +9,7 @@
 
 module.exports = function(grunt) {
 	var path = require('path'),
-	bless = require('bless');
+		bless = require('bless');
 
 	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
 
@@ -22,16 +22,16 @@ module.exports = function(grunt) {
 		});
 		grunt.log.writeflags(options, 'options');
 
-		grunt.util.async.forEach(this.files, function (files, next) {
+		grunt.util.async.forEach(this.files, function (input_files, next) {
 			var data = '';
 
 			// read and concat files
-			files.src.forEach(function (file) {
+			input_files.src.forEach(function (file) {
 				data += grunt.file.read(file);
 			});
 
 			new (bless.Parser)({
-				output: files.dest,
+				output: input_files.dest,
 				options: options
 			}).parse(data, function (err, files, numSelectors) {
 				if (err) {
@@ -54,6 +54,16 @@ module.exports = function(grunt) {
 
 				// write processed file(s)
 				files.forEach(function (file) {
+
+					// Because files is an array there is no way of finding the
+					// first file to add the banner without looping through them.
+					// 
+					// Since we are already doing that...
+
+					if (options.banner && file.filename === input_files.dest) {
+						file.content = options.banner + grunt.util.linefeed + file.content;
+					}
+
 					grunt.file.write(file.filename, file.content);
 				});
 			});

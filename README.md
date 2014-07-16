@@ -44,6 +44,20 @@ grunt.initConfig({
 
 ### Options ###
 
+#### options.banner ####
+
+Type: `String`
+Default value: undefined
+
+Add a banner followed by a new line to the top of the main file, the one that
+you will include in your source.
+
+```js
+  options: {
+    banner: '/* this is a banner */'
+  }
+```
+
 #### options.compress ####
 
 Type: `Boolean`
@@ -129,6 +143,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
-- **Next** Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
+- **Next**
+  - Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
+  - Added a banner option to avoid banners getting misplaced in the blessing process. thanks @jelmerdemaat
 - **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz
