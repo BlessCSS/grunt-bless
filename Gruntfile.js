@@ -45,6 +45,22 @@ module.exports = function(grunt) {
         files: {
           'tmp/below-limit.css': 'test/input/below-limit.css'
         }
+      },
+
+      // This issue was discovered while investigating Issue #14, the force
+      // option is not implemented by the bless parser. A custom force
+      // implementation was added in version 0.2.0.
+      // 
+      // This test should normally fail.
+      issue_fourteen: {
+        options: {
+          compress: true,
+          force: false,
+          cacheBuster: true
+        },
+        files: {
+          'test/input/above-limit.css': 'test/input/above-limit.css'
+        }
       }
     }
   });
@@ -59,7 +75,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'bless']);
+  grunt.registerTask('test', ['clean', 'bless:default_options', 'bless:custom_options']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

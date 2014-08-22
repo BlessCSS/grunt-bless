@@ -146,5 +146,6 @@ Release History
 - **Next**
   - Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
   - Added a banner option to avoid banners getting misplaced in the blessing process. thanks @jelmerdemaat
+  - Added implementation for the `force` option.
 - **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz

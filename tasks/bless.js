@@ -9,7 +9,9 @@
 
 module.exports = function(grunt) {
 	var path = require('path'),
-		bless = require('bless');
+		bless = require('bless'),
+		OVERWRITE_ERROR = 'The destination is the same as the source for file ',
+		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.';
 
 	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
 
@@ -25,10 +27,18 @@ module.exports = function(grunt) {
 		grunt.util.async.forEach(this.files, function (input_files, next) {
 			var data = '';
 
+			// If we are not forcing the build refuse to overwrite the
+			// source file.
+			if (!options.force && input_files.src.indexOf(input_files.dest) >= 0) {
+				grunt.log.error(OVERWRITE_ERROR + input_files.dest);
+				throw grunt.util.error(OVERWRITE_EXCEPTION);
+			}
+
 			// read and concat files
 			input_files.src.forEach(function (file) {
 				data += grunt.file.read(file);
 			});
+
 
 			new (bless.Parser)({
 				output: input_files.dest,
