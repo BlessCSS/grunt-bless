@@ -47,10 +47,20 @@ module.exports = function(grunt) {
         }
       },
 
+      // Just counting files with logging, without write
+      check: {
+        options: {
+          logCount: true
+        },
+        src: [
+          'test/input/*.css'
+        ]
+      },
+
       // This issue was discovered while investigating Issue #14, the force
       // option is not implemented by the bless parser. A custom force
       // implementation was added in version 0.2.0.
-      // 
+      //
       // This test should normally fail.
       issue_fourteen: {
         options: {
@@ -75,7 +85,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'bless:default_options', 'bless:custom_options']);
+  grunt.registerTask('test', ['clean', 'bless:default_options', 'bless:custom_options', 'bless:check']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
