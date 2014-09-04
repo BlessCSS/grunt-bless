@@ -34,7 +34,8 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "bless": "~3.0.0"
+    "bless": "~3.0.0",
+    "chalk": "~0.5.1"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.1.1",
