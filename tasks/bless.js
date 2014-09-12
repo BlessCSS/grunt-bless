@@ -10,6 +10,7 @@
 module.exports = function(grunt) {
 	var path = require('path'),
 		bless = require('bless'),
+		chalk = require('chalk'),
 		OVERWRITE_ERROR = 'The destination is the same as the source for file ',
 		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.';
 
@@ -63,11 +64,15 @@ module.exports = function(grunt) {
 				grunt.log.verbose.writeln(msg);
 
 				// write processed file(s)
+                var filesLength = files.length;
+                var logModified = (filesLength > 1);
+                var writeCount = 0;
+
 				files.forEach(function (file) {
 
 					// Because files is an array there is no way of finding the
 					// first file to add the banner without looping through them.
-					// 
+					//
 					// Since we are already doing that...
 
 					if (options.banner && file.filename === input_files.dest) {
@@ -75,6 +80,14 @@ module.exports = function(grunt) {
 					}
 
 					grunt.file.write(file.filename, file.content);
+
+                    writeCount++;
+
+                    if (logModified) {
+                        var lastSentence = filesLength === writeCount ? 'modified' : 'created';
+
+                        grunt.log.writeln('File ' + chalk.cyan(file.filename) + ' ' + lastSentence + '.');
+                    }
 				});
 			});
 			next();
