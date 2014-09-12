@@ -96,6 +96,13 @@ Default value: `true`
 
 Add or remove a cache-buster parameter from the generated CSS files.
 
+#### options.logCount ####
+
+Type: `Boolean | String`
+Default value: `false`
+
+If set to `true`, you'll get output with all file selectors count. If set to `warn`, you'll get only log messages only on files that reached CSS selectors limit.
+
 ### Usage Examples ###
 
 #### Default Options ####
@@ -134,6 +141,33 @@ grunt.initConfig({
   }
 })
 ```
+
+#### Without writing ####
+
+If you don't want to write blessed files, you can just set input files, without destination and add logging.
+
+```js
+grunt.initConfig({
+  bless: {
+    css: {
+      options: {
+        logCount: true
+      },
+      src: [
+        'test/input/below-limit.css'
+      ]
+    }
+  }
+})
+```
+
+options: {
+                    imports: false,
+                    logCount: 'warn'
+                },
+                src: [
+                    '<%= cssBundlesDir %>/**/*.css'
+                ]
 
 Contributing
 ------------
