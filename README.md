@@ -81,6 +81,9 @@ Default value: `false` if grunt `--force` flag is not set
 Override the Grunt option for this task. This will allow bless to overwrite the
 input file.
 
+**Changed in v0.2.0**, grunt-bless will refuse to overwrite the input file. To
+return to the old behavior, set this option to true.
+
 #### options.imports ####
 
 Type: `Boolean`
@@ -161,14 +164,6 @@ grunt.initConfig({
 })
 ```
 
-options: {
-                    imports: false,
-                    logCount: 'warn'
-                },
-                src: [
-                    '<%= cssBundlesDir %>/**/*.css'
-                ]
-
 Contributing
 ------------
 
@@ -177,9 +172,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
-- **Next**
+- **0.2.0**
   - Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
-  - Added a banner option to avoid banners getting misplaced in the blessing process. thanks @jelmerdemaat
+  - Added a banner option to avoid banners getting misplaced in the blessing process, thanks @jelmerdemaat
   - Added implementation for the `force` option.
+  - Added logCount option, thanks @operatino
+  - Added logging on file modification and creation, thanks (again) @operatino
 - **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz
