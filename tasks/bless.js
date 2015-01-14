@@ -79,7 +79,11 @@ module.exports = function(grunt) {
 					var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
 
 					if (overLimit) {
-						grunt.log.errorlns(coungMsg + ' IE8-9 will read only first ' + limit + '!');
+            if (options.failOnError) {
+							grunt.fatal(coungMsg + ' IE8-9 will read only first ' + limit + '!');
+            } else {
+              grunt.log.errorlns(coungMsg + ' IE8-9 will read only first ' + limit + '!');
+            }
 					} else if (options.logCount !== 'warn') {
 						grunt.log.oklns(coungMsg);
 					}
