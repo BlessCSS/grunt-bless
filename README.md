@@ -106,6 +106,13 @@ Default value: `false`
 
 If set to `true`, you'll get output with all file selectors count. If set to `warn`, you'll get only log messages only on files that reached CSS selectors limit.
 
+#### options.failOnLimit ####
+
+Type: `Boolean`
+Default value: `false`
+
+If set to `true,` the process will exit with an error if the selector limit is exceeded.
+
 ### Usage Examples ###
 
 #### Default Options ####
