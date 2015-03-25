@@ -24,7 +24,8 @@ module.exports = function(grunt) {
 			logCount: false,
 			force: grunt.option('force') || false,
 			warnLimit: 4000,
-			imports: true
+ 			imports: true,
+ 			failOnLimit: false
 		});
 		grunt.log.writeflags(options, 'options');
 
@@ -77,9 +78,13 @@ module.exports = function(grunt) {
 					}
 
 					var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
-
+					var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
 					if (overLimit) {
-						grunt.log.errorlns(coungMsg + ' IE8-9 will read only first ' + limit + '!');
+						if (options.failOnLimit) {
+							grunt.fatal(overLimitErrorMessage);
+						} else {
+							grunt.log.errorlns(overLimitErrorMessage);
+						}
 					} else if (options.logCount !== 'warn') {
 						grunt.log.oklns(coungMsg);
 					}
