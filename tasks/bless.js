@@ -13,7 +13,8 @@ module.exports = function(grunt) {
 		util = require('util'),
 		chalk = require('chalk'),
 		OVERWRITE_ERROR = 'The destination is the same as the source for file ',
-		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.';
+		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
+		failed;
 
 	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
 
@@ -81,10 +82,9 @@ module.exports = function(grunt) {
 					var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
 					if (overLimit) {
 						if (options.failOnLimit) {
-							grunt.fatal(overLimitErrorMessage);
-						} else {
-							grunt.log.errorlns(overLimitErrorMessage);
+							failed = true;
 						}
+						grunt.log.errorlns(overLimitErrorMessage);
 					} else if (options.logCount !== 'warn') {
 						grunt.log.oklns(coungMsg);
 					}
@@ -134,5 +134,8 @@ module.exports = function(grunt) {
 			});
 			next();
 		});
+		if (failed) {
+			grunt.fatal('CSS files have too many selectors.');
+		}
 	});
 };
