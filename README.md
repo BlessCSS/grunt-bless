@@ -111,7 +111,7 @@ If set to `true`, you'll get output with all file selectors count. If set to `wa
 Type: `Boolean`
 Default value: `false`
 
-If set to `true,` the process will exit with an error if the selector limit is exceeded.
+Requires `logCount`. If set to `true,` the process will exit with an error if the selector limit is exceeded.
 
 ### Usage Examples ###
 
