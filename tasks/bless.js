@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 			logCount: false,
 			force: grunt.option('force') || false,
 			warnLimit: 4000,
-      imports: true,
-      failOnLimit: false
+ 			imports: true,
+ 			failOnLimit: false
 		});
 		grunt.log.writeflags(options, 'options');
 
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 					}
 
 					var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
-          var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
+					var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
 					if (overLimit) {
 						if (options.failOnLimit) {
 							grunt.fatal(overLimitErrorMessage);
