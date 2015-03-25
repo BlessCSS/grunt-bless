@@ -79,11 +79,12 @@ module.exports = function(grunt) {
 
 					var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
 					var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
+
 					if (overLimit) {
+						grunt.log.errorlns(overLimitErrorMessage);
+
 						if (options.failOnLimit) {
-							grunt.fatal(overLimitErrorMessage);
-						} else {
-							grunt.log.errorlns(overLimitErrorMessage);
+							throw grunt.util.error(chalk.stripColor(overLimitErrorMessage));
 						}
 					} else if (options.logCount !== 'warn') {
 						grunt.log.oklns(coungMsg);
