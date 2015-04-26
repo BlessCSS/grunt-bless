@@ -70,7 +70,7 @@ module.exports = function(grunt) {
 
 				if (overLimit) {
 					_numSelectors = chalk.red(result.numSelectors);
-				} else if (numSelectors > options.warnLimit ) {
+				} else if (result.numSelectors > options.warnLimit ) {
 					_numSelectors = chalk.yellow(result.numSelectors);
 				}
 
