@@ -13,7 +13,8 @@ module.exports = function(grunt) {
 		util = require('util'),
 		chalk = require('chalk'),
 		OVERWRITE_ERROR = 'The destination is the same as the source for file ',
-		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.';
+		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
+		STUBBED_SUFFIX = 'blessed';
 
 	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
 
@@ -35,9 +36,20 @@ module.exports = function(grunt) {
 
 		grunt.util.async.forEach(fileList, function (inputFile, next) {
 			var writeFiles = inputFile.dest ? true : false;
-			var outPutfileName = inputFile.dest || inputFile;
+			var output_filename_orig = inputFile.dest || inputFile;
+			var output_filename_parts = (output_filename_orig).split('.');
+			var outPutfileName;
 			var limit = 4095;
 			var data = '';
+			var parse_result;
+			var suffix = STUBBED_SUFFIX;
+
+			// prep the output file by stripping the .css from the end.
+			if (output_filename_parts[output_filename_parts.length - 1] === 'css') {
+				output_filename_parts.pop();
+			}
+
+			outPutfileName = output_filename_parts.join('.');
 
 			// If we are not forcing the build refuse to overwrite the
 			// source file.
@@ -58,81 +70,108 @@ module.exports = function(grunt) {
 			}
 
 
-			new (bless.Parser)({
-				output: outPutfileName,
-				options: options
-			}).parse(data, function (err, files, numSelectors) {
-				if (err) {
-					grunt.log.error(err);
-					throw grunt.util.error(err);
+			parse_result = bless.parser(data);
+
+			var numSelectors = parse_result.numSelectors;
+
+			if (options.logCount) {
+				var overLimit = numSelectors > limit;
+				var _numSelectors = chalk.green(numSelectors);
+
+				if (overLimit) {
+					_numSelectors = chalk.red(numSelectors);
+				} else if (numSelectors > options.warnLimit ) {
+					_numSelectors = chalk.yellow(numSelectors);
 				}
 
-				if (options.logCount) {
-					var overLimit = numSelectors > limit;
-					var _numSelectors = chalk.green(numSelectors);
+				var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
+				var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
 
-					if (overLimit) {
-						_numSelectors = chalk.red(numSelectors);
-					} else if (numSelectors > options.warnLimit ) {
-						_numSelectors = chalk.yellow(numSelectors);
+				if (overLimit) {
+					grunt.log.errorlns(overLimitErrorMessage);
+
+					if (options.failOnLimit) {
+						throw grunt.util.error(chalk.stripColor(overLimitErrorMessage));
 					}
-
-					var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
-					var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
-
-					if (overLimit) {
-						grunt.log.errorlns(overLimitErrorMessage);
-
-						if (options.failOnLimit) {
-							throw grunt.util.error(chalk.stripColor(overLimitErrorMessage));
-						}
-					} else if (options.logCount !== 'warn') {
-						grunt.log.oklns(coungMsg);
-					}
+				} else if (options.logCount !== 'warn') {
+					grunt.log.oklns(coungMsg);
 				}
+			}
 
-				// print log message
-				var msg = 'Found ' + numSelectors + ' selector';
-				if (numSelectors !== 1) {
-					msg += 's';
-				}
-				msg += ', ';
-				if (files.length > 1) {
-					msg += 'splitting into ' + files.length + ' files.';
-				} else {
-					msg += 'not splitting.';
-				}
-				grunt.log.verbose.writeln(msg);
+			// write processed file(s)
+			var filesLength = parse_result.data.length;
+			var logModified = (filesLength > 1);
+			var writeCount = 0;
 
-				// write processed file(s)
-				var filesLength = files.length;
-				var logModified = (filesLength > 1);
-				var writeCount = 0;
+			// This header will only be shown on the main file
+			var header = '';
 
-				if (writeFiles) {
-					files.forEach(function (file) {
+			if (options.banner) {
+				header += options.banner + grunt.util.linefeed;
+			}
 
-						// Because files is an array there is no way of finding the
-						// first file to add the banner without looping through them.
-						//
-						// Since we are already doing that...
-
-						if (options.banner && file.filename === file.dest) {
-							file.content = options.banner + grunt.util.linefeed + file.content;
-						}
-
-						grunt.file.write(file.filename, file.content);
-
-						writeCount++;
-
-						if (logModified) {
-							var lastSentence = filesLength === writeCount ? 'modified' : 'created';
-
-							grunt.log.writeln('File ' + chalk.cyan(file.filename) + ' ' + lastSentence + '.');
-						}
-					});
-				}
+			header += bless.importer({
+				numFiles: filesLength,
+				output: output_filename_orig,
+				suffix: suffix
 			});
+
+			header += grunt.util.linefeed;
+
+			// print log message
+			var msg = 'Found ' + numSelectors + ' selector';
+			if (numSelectors !== 1) {
+				msg += 's';
+			}
+			msg += ', ';
+			if (filesLength > 1) {
+				msg += 'splitting into ' + filesLength + ' files.';
+			} else {
+				msg += 'not splitting.';
+			}
+			grunt.log.verbose.writeln(msg);
+
+			if (writeFiles) {
+				parse_result.data.forEach(function (file, index) {
+					var filename = outPutfileName,
+						// the files are listed with the main file being the
+						// last do some calculations to git the proper index.
+						nth_file = (filesLength - 1) - index,
+
+						// because of the reverse order nth_file will be 0 if
+						// its the main file.
+						is_main_file = !nth_file;
+
+					// if it isn't hte main file add the suffix to the filename
+					if (!is_main_file) {
+						filename += '-' + suffix + nth_file;
+					}
+
+					filename += '.css';
+
+					// Because files is an array there is no way of finding the
+					// first file to add the banner without looping through them.
+					//
+					// Since we are already doing that...
+
+					if (is_main_file) {
+						file = header + file;
+					}
+
+					grunt.file.write(filename, file);
+
+					writeCount++;
+
+					if (logModified) {
+						var lastSentence = filesLength === writeCount ? 'modified' : 'created';
+
+						grunt.log.writeln('File ' + chalk.cyan(filename) + ' ' + lastSentence + '.');
+					}
+
+				});
+
+			}
+
 			next();
 		});
 	});

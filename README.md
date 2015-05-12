@@ -1,6 +1,11 @@
 grunt-bless
 ===========
 
+***
+This is a development branch which is leading up to the release of v1.0.0
+It will track bless.js 4.0.0
+***
+
 A grunt module for [Blessing](http://blesscss.com/) your CSS files so they will work in Internet Explorer. This is based on a [pull request](https://github.com/paulyoung/bless.js/pull/11) by Aki Alexandra Nofftz (@akinofftz).
 
 Getting Started
@@ -179,6 +184,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
+- **Upcoming in 1.0.0**
+	- Update to bless 4.0.0
 - **Next**
 	- Clean up the NPM package, thanks @mimiflynn
 	- other assorted clean up and formatting.
