@@ -1,5 +1,12 @@
+# Node files
 node_modules
 npm-debug.log
-tmp
 
+# OSX Files
 .DS_Store
+
+# Version control files
+*.orig
+
+# grunt-bless files
+tmp

@@ -29,16 +29,16 @@ In your project's Gruntfile, add a section named `bless` to the data object pass
 
 ```js
 grunt.initConfig({
-  bless: {
-    css: {
-      options: {
-        // Task-specific options go here.
-      },
-      your_target: {
-        // Target-specific file lists and/or options go here.
-      }
-    }
-  }
+	bless: {
+		css: {
+			options: {
+				// Task-specific options go here.
+			},
+			your_target: {
+				// Target-specific file lists and/or options go here.
+			}
+		}
+	}
 })
 ```
 
@@ -53,9 +53,9 @@ Add a banner followed by a new line to the top of the main file, the one that
 you will include in your source.
 
 ```js
-  options: {
-    banner: '/* this is a banner */'
-  }
+	options: {
+		banner: '/* this is a banner */'
+	}
 ```
 
 #### options.compress ####
@@ -121,14 +121,14 @@ The default options will split the files and add a cache-buster parameter. Just 
 
 ```js
 grunt.initConfig({
-  bless: {
-    css: {
-      options: {},
-      files: {
-        'tmp/above-limit.css': 'test/input/above-limit.css'
-      }
-    }
-  }
+	bless: {
+		css: {
+			options: {},
+			files: {
+				'tmp/above-limit.css': 'test/input/above-limit.css'
+			}
+		}
+	}
 })
 ```
 
@@ -138,17 +138,17 @@ You can set any option allowed by bless.
 
 ```js
 grunt.initConfig({
-  bless: {
-    css: {
-      options: {
-        cacheBuster: false,
-        compress: true
-      },
-      files: {
-        'tmp/below-limit.css': 'test/input/below-limit.css'
-      }
-    }
-  }
+	bless: {
+		css: {
+			options: {
+				cacheBuster: false,
+				compress: true
+			},
+			files: {
+				'tmp/below-limit.css': 'test/input/below-limit.css'
+			}
+		}
+	}
 })
 ```
 
@@ -158,16 +158,16 @@ If you don't want to write blessed files, you can just set input files, without 
 
 ```js
 grunt.initConfig({
-  bless: {
-    css: {
-      options: {
-        logCount: true
-      },
-      src: [
-        'test/input/below-limit.css'
-      ]
-    }
-  }
+	bless: {
+		css: {
+			options: {
+				logCount: true
+			},
+			src: [
+				'test/input/below-limit.css'
+			]
+		}
+	}
 })
 ```
 
@@ -179,11 +179,14 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
+- **Next**
+	- Clean up the NPM package, thanks @mimiflynn
+	- other assorted clean up and formatting.
 - **0.2.0**
-  - Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
-  - Added a banner option to avoid banners getting misplaced in the blessing process, thanks @jelmerdemaat
-  - Added implementation for the `force` option.
-  - Added logCount option, thanks @operatino
-  - Added logging on file modification and creation, thanks (again) @operatino
+	- Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
+	- Added a banner option to avoid banners getting misplaced in the blessing process, thanks @jelmerdemaat
+	- Added implementation for the `force` option.
+	- Added logCount option, thanks @operatino
+	- Added logging on file modification and creation, thanks (again) @operatino
 - **0.1.1** Fatal documentation flaw, no actual code changes, thanks @codecollision
 - **0.1.0** Initial release, courtesy of Aki Alexandra Nofftz
