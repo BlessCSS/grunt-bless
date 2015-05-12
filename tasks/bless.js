@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 			logCount: false,
 			force: grunt.option('force') || false,
 			warnLimit: 4000,
- 			imports: true,
- 			failOnLimit: false
+			imports: true,
+			failOnLimit: false
 		});
 		grunt.log.writeflags(options, 'options');
 
