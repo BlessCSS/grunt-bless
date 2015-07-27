@@ -16,6 +16,23 @@ module.exports = function(grunt) {
 		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
 		STUBBED_SUFFIX = 'blessed';
 
+	function build_name(base, nth_file, suffix) {
+		return base + '-' + suffix + nth_file;
+	}
+
+	function importer(options) {
+		var current = options.numFiles - 1,
+			imports = '';
+
+		while (current > 0) {
+			imports += '@import "' + build_name(options.output, current, options.suffix) + '.css";' + options.linefeed;
+
+			current--;
+		}
+
+		return imports;
+	}
+
 	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
 
 		var options = this.options({
@@ -70,9 +87,9 @@ module.exports = function(grunt) {
 			}
 
 
-			parse_result = bless.parser(data);
+			parse_result = bless.chunk(data);
 
-			var numSelectors = parse_result.numSelectors;
+			var numSelectors = parse_result.totalSelectorCount;
 
 			if (options.logCount) {
 				var overLimit = numSelectors > limit;
@@ -110,10 +127,11 @@ module.exports = function(grunt) {
 				header += options.banner + grunt.util.linefeed;
 			}
 
-			header += bless.importer({
+			header += importer({
 				numFiles: filesLength,
-				output: output_filename_orig,
-				suffix: suffix
+				output: outPutfileName,
+				suffix: suffix,
+				linefeed: (options.compress ? '' : grunt.util.linefeed)
 			});
 
 			header += grunt.util.linefeed;
@@ -135,16 +153,16 @@ module.exports = function(grunt) {
 				parse_result.data.forEach(function (file, index) {
 					var filename = outPutfileName,
 						// the files are listed with the main file being the
-						// last do some calculations to git the proper index.
+						// last do some calculations to get the proper index.
 						nth_file = (filesLength - 1) - index,
 
 						// because of the reverse order nth_file will be 0 if
 						// its the main file.
 						is_main_file = !nth_file;
 
-					// if it isn't hte main file add the suffix to the filename
+					// if it isn't the main file add the suffix to the filename
 					if (!is_main_file) {
-						filename += '-' + suffix + nth_file;
+						filename = build_name(filename, nth_file, suffix);
 					}
 
 					filename += '.css';
