@@ -83,7 +83,7 @@ module.exports = function(grunt) {
 					if (overLimit) {
 						grunt.log.errorlns(overLimitErrorMessage);
 
-						if (options.failOnLimit) {
+						if (options.failOnLimit && !options.force) {
 							throw grunt.util.error(chalk.stripColor(overLimitErrorMessage));
 						}
 					} else if (options.logCount !== 'warn') {
