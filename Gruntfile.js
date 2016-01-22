@@ -16,16 +16,49 @@ module.exports = function(grunt) {
 		jshint: {
 			all: [
 				'Gruntfile.js',
-				'tasks/*.js'
+				'src/**/*.js'
 			],
 			options: {
 				jshintrc: '.jshintrc'
 			}
 		},
 
+		babel: {
+			options: {
+				'modules': 'commonStrict',
+				'whitelist': [
+					'es6.modules',
+					'es6.arrowFunctions',
+					//'minification.deadCodeElimination',
+					//'minification.constantFolding',
+					'strict'
+				],
+				'optional': [
+					'runtime'
+				]
+			},
+			dist: {
+				files: [
+					{
+						'cwd': 'src/lib/',
+						'src': '**/*.js',
+						'dest': 'lib/',
+						'expand': true,
+						'filter': 'isFile'
+					}, {
+						'cwd': 'src/tasks/',
+						'src': '**/*.js',
+						'dest': 'tasks/',
+						'expand': true,
+						'filter': 'isFile'
+					}
+				]
+			}
+		},
+
 		// Before generating any new files, remove any previously-created files.
 		clean: {
-			tests: ['tmp']
+			tests: ['tmp', 'tasks', 'lib']
 		},
 
 		// Configuration to be run (and then tested).
@@ -72,6 +105,18 @@ module.exports = function(grunt) {
 					'test/input/above-limit.css': 'test/input/above-limit.css'
 				}
 			}
+		},
+
+		// Configuration for unit tests
+		mochaTest: {
+			test: {
+				options: {
+					reporter: 'spec'
+				},
+				src: [
+					'test/**/*.js'
+				]
+			}
 		}
 	});
 
@@ -81,13 +126,16 @@ module.exports = function(grunt) {
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-nodeunit');
+	grunt.loadNpmTasks('grunt-mocha-test');
+	grunt.loadNpmTasks('grunt-babel');
+
+	grunt.registerTask('build', ['babel']);
 
 	// Whenever the "test" task is run, first clean the "tmp" dir, then run this
 	// plugin's task(s), then test the result.
-	grunt.registerTask('test', ['clean', 'bless:default_options', 'bless:custom_options', 'bless:check']);
+	grunt.registerTask('test', ['clean', 'build', 'mochaTest', 'bless:default_options', 'bless:custom_options', 'bless:check']);
 
 	// By default, lint and run all tests.
-	grunt.registerTask('default', ['jshint', 'test']);
+	grunt.registerTask('default', ['clean', 'jshint', 'build']);
 
 };

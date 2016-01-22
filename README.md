@@ -97,13 +97,6 @@ Default value: `true`
 Enable or disable the use of `@import` in generated CSS files. This feature was
 added in bless.js 3.0.3.
 
-#### options.cacheBuster ####
-
-Type: `Boolean`
-Default value: `true`
-
-Add or remove a cache-buster parameter from the generated CSS files.
-
 #### options.logCount ####
 
 Type: `Boolean | String`
@@ -117,6 +110,22 @@ Type: `Boolean`
 Default value: `false`
 
 Requires `logCount`. If set to `true,` the process will exit with an error if the selector limit is exceeded.
+
+### Removed options ###
+
+These options have been removed from `grunt-bless` and no longer function.
+
+#### options.cacheBuster ####
+
+Type: `Boolean`
+Default value: `true`
+Reason for removal:
+	- Removed in bless 4.0.0.
+	- Other plugins may provide better support.
+	- [See this issue](https://github.com/BlessCSS/bless/issues/57)
+
+Add or remove a cache-buster parameter from the generated CSS files.
+
 
 ### Usage Examples ###
 
@@ -188,7 +197,9 @@ Release History
 	- Update to bless 4.0.0
 - **Next**
 	- Clean up the NPM package, thanks @mimiflynn
-	- other assorted clean up and formatting.
+	- Remove use of deprecated APIs.
+	- Move to ES6.
+	- Other assorted clean up and formatting.
 - **0.2.0**
 	- Updated documentation to note the newness of the not yet released to npm `imports` option, thanks @spoike
 	- Added a banner option to avoid banners getting misplaced in the blessing process, thanks @jelmerdemaat

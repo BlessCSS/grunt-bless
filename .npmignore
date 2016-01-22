@@ -10,5 +10,4 @@ npm-debug.log
 
 # grunt-bless files
 tmp
-lib
-tasks
+src

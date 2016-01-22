@@ -7,66 +7,48 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+var _libFile = require('../lib/file');
+
+var file_utils = _libFile;
+
+const MAX_SELECTORS = 4095,
+      WARN_PERCENT = 0.98,
+      OVERWRITE_ERROR = 'The destination is the same as the source for file ',
+      OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
+      STUBBED_SUFFIX = 'blessed';
+
+module.exports = function (grunt) {
 	var path = require('path'),
-		bless = require('bless'),
-		util = require('util'),
-		chalk = require('chalk'),
-		OVERWRITE_ERROR = 'The destination is the same as the source for file ',
-		OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
-		STUBBED_SUFFIX = 'blessed';
+	    async = require('async'),
+	    bless = require('bless'),
+	    util = require('util'),
+	    chalk = require('chalk');
 
-	function build_name(base, nth_file, suffix) {
-		return base + '-' + suffix + nth_file;
-	}
+	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function () {
 
-	function importer(options) {
-		var current = options.numFiles - 1,
-			imports = '';
-
-		while (current > 0) {
-			imports += '@import "' + build_name(options.output, current, options.suffix) + '.css";' + options.linefeed;
-
-			current--;
-		}
-
-		return imports;
-	}
-
-	grunt.registerMultiTask('bless', 'Split CSS files suitable for IE', function() {
-
-		var options = this.options({
-			cacheBuster: true,
+		// Taking list of files with write destination or list without dest
+		var files = this.files,
+		    fileList = files.length === 1 && !files[0].dest ? files[0].src : files,
+		    options = this.options({
 			cleanup: true,
 			compress: false,
 			logCount: false,
 			force: grunt.option('force') || false,
-			warnLimit: 4000,
+			warnLimit: Math.floor(MAX_SELECTORS * WARN_PERCENT),
 			imports: true,
 			failOnLimit: false
 		});
+
 		grunt.log.writeflags(options, 'options');
 
-		// Taking list of files with write destination or list without dest
-		var files = this.files;
-		var fileList = files.length === 1 && !files[0].dest ? files[0].src : files;
-
-		grunt.util.async.forEach(fileList, function (inputFile, next) {
-			var writeFiles = inputFile.dest ? true : false;
-			var output_filename_orig = inputFile.dest || inputFile;
-			var output_filename_parts = (output_filename_orig).split('.');
-			var outPutfileName;
-			var limit = 4095;
-			var data = '';
-			var parse_result;
-			var suffix = STUBBED_SUFFIX;
-
-			// prep the output file by stripping the .css from the end.
-			if (output_filename_parts[output_filename_parts.length - 1] === 'css') {
-				output_filename_parts.pop();
-			}
-
-			outPutfileName = output_filename_parts.join('.');
+		async.each(fileList, function (inputFile, next) {
+			var writeFiles = !!inputFile.dest,
+			    output_filename_orig = inputFile.dest || inputFile,
+			    outPutfileName = file_utils.strip_extension(output_filename_orig),
+			    limit = MAX_SELECTORS,
+			    suffix = STUBBED_SUFFIX,
+			    data = '',
+			    parse_result;
 
 			// If we are not forcing the build refuse to overwrite the
 			// source file.
@@ -77,117 +59,101 @@ module.exports = function(grunt) {
 				}
 			}
 
-			// Read and concat files
-			if (util.isArray(inputFile.src)) {
-				inputFile.src.forEach(function (file) {
-					data += grunt.file.read(file);
-				});
-			} else {
-				data += grunt.file.read(inputFile);
-			}
-
+			data = file_utils.concat(grunt.file, inputFile);
 
 			parse_result = bless.chunk(data);
 
 			var numSelectors = parse_result.totalSelectorCount;
 
 			if (options.logCount) {
-				var overLimit = numSelectors > limit;
-				var _numSelectors = chalk.green(numSelectors);
+				let overLimit = numSelectors > limit,
+				    _numSelectors = chalk.green(numSelectors);
 
 				if (overLimit) {
 					_numSelectors = chalk.red(numSelectors);
-				} else if (numSelectors > options.warnLimit ) {
+				} else if (numSelectors > options.warnLimit) {
 					_numSelectors = chalk.yellow(numSelectors);
 				}
 
-				var coungMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
-				var overLimitErrorMessage = coungMsg + ' IE8-9 will read only first ' + limit + '!';
+				let countMsg = `${ path.basename(outPutfileName) } has ${ _numSelectors } CSS selectors.`;
 
 				if (overLimit) {
+					let overLimitErrorMessage = `${ countMsg } IE8-9 will read only first ${ limit }!`;
+
 					grunt.log.errorlns(overLimitErrorMessage);
 
 					if (options.failOnLimit) {
 						throw grunt.util.error(chalk.stripColor(overLimitErrorMessage));
 					}
 				} else if (options.logCount !== 'warn') {
-					grunt.log.oklns(coungMsg);
+					grunt.log.oklns(countMsg);
 				}
 			}
 
 			// write processed file(s)
 			var filesLength = parse_result.data.length;
-			var logModified = (filesLength > 1);
-			var writeCount = 0;
-
-			// This header will only be shown on the main file
-			var header = '';
-
-			if (options.banner) {
-				header += options.banner + grunt.util.linefeed;
-			}
-
-			header += importer({
-				numFiles: filesLength,
-				output: outPutfileName,
-				suffix: suffix,
-				linefeed: (options.compress ? '' : grunt.util.linefeed)
-			});
-
-			header += grunt.util.linefeed;
+			var is_modified = filesLength > 1;
 
 			// print log message
 			var msg = 'Found ' + numSelectors + ' selector';
+
 			if (numSelectors !== 1) {
 				msg += 's';
 			}
+
 			msg += ', ';
-			if (filesLength > 1) {
+
+			if (is_modified) {
 				msg += 'splitting into ' + filesLength + ' files.';
 			} else {
 				msg += 'not splitting.';
 			}
+
 			grunt.log.verbose.writeln(msg);
 
 			if (writeFiles) {
+				// This header will only be shown on the main file
+				let header = '',
+				    main_file = filesLength - 1,
+				    writeCount = 0;
+
+				if (options.banner) {
+					header += options.banner + grunt.util.linefeed;
+				}
+
+				header += file_utils.imports({
+					numFiles: filesLength,
+					output: outPutfileName,
+					suffix: suffix,
+					linefeed: options.compress ? '' : grunt.util.linefeed
+				});
+
+				header += grunt.util.linefeed;
+
+				// The main file is always the last one in the array.
+				// So add the header here before we iterate.
+				parse_result.data[main_file] = header + parse_result.data[main_file];
+
+				// Iterate the files and write them out.
 				parse_result.data.forEach(function (file, index) {
-					var filename = outPutfileName,
-						// the files are listed with the main file being the
-						// last do some calculations to get the proper index.
-						nth_file = (filesLength - 1) - index,
+					// the files are listed with the main file being the
+					// last do some calculations to get the proper index.
+					var nth_file = main_file - index,
+					   
 
-						// because of the reverse order nth_file will be 0 if
-						// its the main file.
-						is_main_file = !nth_file;
-
-					// if it isn't the main file add the suffix to the filename
-					if (!is_main_file) {
-						filename = build_name(filename, nth_file, suffix);
-					}
-
-					filename += '.css';
-
-					// Because files is an array there is no way of finding the
-					// first file to add the banner without looping through them.
-					//
-					// Since we are already doing that...
-
-					if (is_main_file) {
-						file = header + file;
-					}
+					// build the filename
+					filename = file_utils.name(outPutfileName, nth_file, suffix, file_utils.EXTENSION);
 
 					grunt.file.write(filename, file);
 
 					writeCount++;
 
-					if (logModified) {
+					if (is_modified) {
 						var lastSentence = filesLength === writeCount ? 'modified' : 'created';
 
-						grunt.log.writeln('File ' + chalk.cyan(filename) + ' ' + lastSentence + '.');
+						grunt.log.writeln(`File ${ chalk.cyan(filename) } ${ lastSentence }.`);
 					}
-
 				});
-
 			}
 
 			next();
