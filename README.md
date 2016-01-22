@@ -113,16 +113,17 @@ Requires `logCount`. If set to `true,` the process will exit with an error if th
 
 ### Removed options ###
 
-These options have been removed from `grunt-bless` and no longer function.
+These options have been removed from grunt-bless and no longer function.
 
 #### options.cacheBuster ####
 
 Type: `Boolean`
 Default value: `true`
 Reason for removal:
-	- Removed in bless 4.0.0.
-	- Other plugins may provide better support.
-	- [See this issue](https://github.com/BlessCSS/bless/issues/57)
+
+- Removed in bless 4.0.0.
+- Other plugins may provide better support.
+- [See this issue](https://github.com/BlessCSS/bless/issues/57)
 
 Add or remove a cache-buster parameter from the generated CSS files.
 
