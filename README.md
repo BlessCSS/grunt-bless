@@ -104,7 +104,6 @@ Default value: `false`
 
 Requires `logCount`. If set to `true,` the process will exit with an error if the selector limit is exceeded.
 
-
 #### options.suffix ####
 
 Type: `String`
@@ -113,6 +112,14 @@ Added: v1.0.0
 
 Add a suffix to the filename. The suffix will be added before the number and
 only if it is not the main file.
+
+#### options.sourceMaps ####
+
+Type: `Boolean`
+Default value: `false`
+Added: v1.0.0
+
+Generate sourcemaps for the provided files.
 
 ### Removed options ###
 

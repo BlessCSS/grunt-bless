@@ -21,6 +21,7 @@ module.exports = function(grunt) {
 					'tmp/above-limit.css': 'input/above-limit.css'
 				}
 			},
+
 			custom_options: {
 				options: {
 					banner: '/* This file has been blessed by <%= pkg.name %> v<%= pkg.version %> */',
@@ -30,6 +31,16 @@ module.exports = function(grunt) {
 					'tmp/below-limit.css': 'input/below-limit.css'
 				}
 			},
+
+			sourcemaps: {
+				options: {
+					sourceMaps: true
+				},
+				files: {
+					'tmp/above-limit.css': 'input/above-limit.css'
+				}
+			},
+
 
 			// Just counting files with logging, without write
 			check: {
@@ -64,6 +75,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('all', ['bless']);
 
 	// By default, lint and run all tests.
-	grunt.registerTask('default', ['bless:default_options', 'bless:custom_options', 'bless:check']);
+	grunt.registerTask('default', ['bless:default_options', 'bless:custom_options', 'bless:check', 'bless:sourcemaps']);
 
 };

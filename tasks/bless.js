@@ -36,10 +36,11 @@ module.exports = function (grunt) {
 			warnLimit: Math.floor(MAX_SELECTORS * WARN_PERCENT),
 			imports: true,
 			failOnLimit: false,
-			suffix: DEFAULT_SUFFIX
+			suffix: DEFAULT_SUFFIX,
+			sourceMaps: false
 		});
 
-		grunt.log.writeflags(options, 'options');
+		//grunt.log.writeflags(options, 'options');
 
 		async.each(fileList, function (inputFile, next) {
 			var writeFiles = !!inputFile.dest,
@@ -61,7 +62,10 @@ module.exports = function (grunt) {
 
 			data = file_utils.concat(grunt.file, inputFile);
 
-			parse_result = bless.chunk(data);
+			parse_result = bless.chunk(data, {
+				source: inputFile.src[0],
+				sourcemaps: options.sourceMaps
+			});
 
 			var numSelectors = parse_result.totalSelectorCount;
 
@@ -115,6 +119,7 @@ module.exports = function (grunt) {
 				(function () {
 					// This header will only be shown on the main file
 					var header = '',
+					    has_sourcemaps = parse_result.maps && parse_result.maps.length,
 					    main_file = filesLength - 1,
 					    writeCount = 0;
 
@@ -142,10 +147,15 @@ module.exports = function (grunt) {
 						var nth_file = main_file - index,
 						   
 
-						// build the filename
-						filename = file_utils.name(outPutfileName, nth_file, suffix, file_utils.EXTENSION);
+						// build the filenames
+						filename = file_utils.name(outPutfileName, nth_file, suffix, file_utils.EXTENSION),
+						    mapname = file_utils.name(outPutfileName, nth_file, suffix, file_utils.SOURCEMAP_EXTENSION);
 
 						grunt.file.write(filename, file);
+
+						if (has_sourcemaps) {
+							grunt.file.write(mapname, JSON.stringify(parse_result.maps[index]));
+						}
 
 						writeCount++;
 
