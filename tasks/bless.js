@@ -11,11 +11,11 @@ var _libFile = require('../lib/file');
 
 var file_utils = _libFile;
 
-const MAX_SELECTORS = 4095,
-      WARN_PERCENT = 0.98,
-      OVERWRITE_ERROR = 'The destination is the same as the source for file ',
-      OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
-      STUBBED_SUFFIX = 'blessed';
+var MAX_SELECTORS = 4095,
+    WARN_PERCENT = 0.98,
+    OVERWRITE_ERROR = 'The destination is the same as the source for file ',
+    OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
+    STUBBED_SUFFIX = 'blessed';
 
 module.exports = function (grunt) {
 	var path = require('path'),
@@ -66,7 +66,7 @@ module.exports = function (grunt) {
 			var numSelectors = parse_result.totalSelectorCount;
 
 			if (options.logCount) {
-				let overLimit = numSelectors > limit,
+				var overLimit = numSelectors > limit,
 				    _numSelectors = chalk.green(numSelectors);
 
 				if (overLimit) {
@@ -75,10 +75,10 @@ module.exports = function (grunt) {
 					_numSelectors = chalk.yellow(numSelectors);
 				}
 
-				let countMsg = `${ path.basename(outPutfileName) } has ${ _numSelectors } CSS selectors.`;
+				var countMsg = path.basename(outPutfileName) + ' has ' + _numSelectors + ' CSS selectors.';
 
 				if (overLimit) {
-					let overLimitErrorMessage = `${ countMsg } IE8-9 will read only first ${ limit }!`;
+					var overLimitErrorMessage = countMsg + ' IE8-9 will read only first ' + limit + '!';
 
 					grunt.log.errorlns(overLimitErrorMessage);
 
@@ -112,48 +112,50 @@ module.exports = function (grunt) {
 			grunt.log.verbose.writeln(msg);
 
 			if (writeFiles) {
-				// This header will only be shown on the main file
-				let header = '',
-				    main_file = filesLength - 1,
-				    writeCount = 0;
+				(function () {
+					// This header will only be shown on the main file
+					var header = '',
+					    main_file = filesLength - 1,
+					    writeCount = 0;
 
-				if (options.banner) {
-					header += options.banner + grunt.util.linefeed;
-				}
-
-				header += file_utils.imports({
-					numFiles: filesLength,
-					output: outPutfileName,
-					suffix: suffix,
-					linefeed: options.compress ? '' : grunt.util.linefeed
-				});
-
-				header += grunt.util.linefeed;
-
-				// The main file is always the last one in the array.
-				// So add the header here before we iterate.
-				parse_result.data[main_file] = header + parse_result.data[main_file];
-
-				// Iterate the files and write them out.
-				parse_result.data.forEach(function (file, index) {
-					// the files are listed with the main file being the
-					// last do some calculations to get the proper index.
-					var nth_file = main_file - index,
-					   
-
-					// build the filename
-					filename = file_utils.name(outPutfileName, nth_file, suffix, file_utils.EXTENSION);
-
-					grunt.file.write(filename, file);
-
-					writeCount++;
-
-					if (is_modified) {
-						var lastSentence = filesLength === writeCount ? 'modified' : 'created';
-
-						grunt.log.writeln(`File ${ chalk.cyan(filename) } ${ lastSentence }.`);
+					if (options.banner) {
+						header += options.banner + grunt.util.linefeed;
 					}
-				});
+
+					header += file_utils.imports({
+						numFiles: filesLength,
+						output: outPutfileName,
+						suffix: suffix,
+						linefeed: options.compress ? '' : grunt.util.linefeed
+					});
+
+					header += grunt.util.linefeed;
+
+					// The main file is always the last one in the array.
+					// So add the header here before we iterate.
+					parse_result.data[main_file] = header + parse_result.data[main_file];
+
+					// Iterate the files and write them out.
+					parse_result.data.forEach(function (file, index) {
+						// the files are listed with the main file being the
+						// last do some calculations to get the proper index.
+						var nth_file = main_file - index,
+						   
+
+						// build the filename
+						filename = file_utils.name(outPutfileName, nth_file, suffix, file_utils.EXTENSION);
+
+						grunt.file.write(filename, file);
+
+						writeCount++;
+
+						if (is_modified) {
+							var lastSentence = filesLength === writeCount ? 'modified' : 'created';
+
+							grunt.log.writeln('File ' + chalk.cyan(filename) + ' ' + lastSentence + '.');
+						}
+					});
+				})();
 			}
 
 			next();
