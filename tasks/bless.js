@@ -15,7 +15,7 @@ var MAX_SELECTORS = 4095,
     WARN_PERCENT = 0.98,
     OVERWRITE_ERROR = 'The destination is the same as the source for file ',
     OVERWRITE_EXCEPTION = 'Cowardly refusing to overwrite the source file.',
-    STUBBED_SUFFIX = 'blessed';
+    DEFAULT_SUFFIX = '';
 
 module.exports = function (grunt) {
 	var path = require('path'),
@@ -30,13 +30,13 @@ module.exports = function (grunt) {
 		var files = this.files,
 		    fileList = files.length === 1 && !files[0].dest ? files[0].src : files,
 		    options = this.options({
-			cleanup: true,
 			compress: false,
 			logCount: false,
 			force: grunt.option('force') || false,
 			warnLimit: Math.floor(MAX_SELECTORS * WARN_PERCENT),
 			imports: true,
-			failOnLimit: false
+			failOnLimit: false,
+			suffix: DEFAULT_SUFFIX
 		});
 
 		grunt.log.writeflags(options, 'options');
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
 			    output_filename_orig = inputFile.dest || inputFile,
 			    outPutfileName = file_utils.strip_extension(output_filename_orig),
 			    limit = MAX_SELECTORS,
-			    suffix = STUBBED_SUFFIX,
+			    suffix = options.suffix,
 			    data = '',
 			    parse_result;
 

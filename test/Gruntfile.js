@@ -18,17 +18,16 @@ module.exports = function(grunt) {
 			default_options: {
 				options: {},
 				files: {
-					'tmp/above-limit.css': 'test/input/above-limit.css'
+					'tmp/above-limit.css': 'input/above-limit.css'
 				}
 			},
 			custom_options: {
 				options: {
 					banner: '/* This file has been blessed by <%= pkg.name %> v<%= pkg.version %> */',
-					cacheBuster: false,
 					compress: true
 				},
 				files: {
-					'tmp/below-limit.css': 'test/input/below-limit.css'
+					'tmp/below-limit.css': 'input/below-limit.css'
 				}
 			},
 
@@ -50,8 +49,7 @@ module.exports = function(grunt) {
 			issue_fourteen: {
 				options: {
 					compress: true,
-					force: false,
-					cacheBuster: true
+					force: false
 				},
 				files: {
 					'test/input/above-limit.css': 'test/input/above-limit.css'

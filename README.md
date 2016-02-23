@@ -105,6 +105,15 @@ Default value: `false`
 Requires `logCount`. If set to `true,` the process will exit with an error if the selector limit is exceeded.
 
 
+#### options.suffix ####
+
+Type: `String`
+Default value: `''`
+Added: v1.0.0
+
+Add a suffix to the filename. The suffix will be added before the number and
+only if it is not the main file.
+
 ### Removed options ###
 
 These options have been **removed** from grunt-bless and no longer function.

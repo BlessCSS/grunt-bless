@@ -32,7 +32,7 @@
   },
   "scripts": {
   	"pretest": "grunt",
-    "test": "grunt test && grunt --gruntfile ./test/Gruntfile.js"
+    "test": "grunt test && grunt --gruntfile ./test/Gruntfile.js -v"
   },
   "dependencies": {
     "async": "^1.5.0",

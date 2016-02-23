@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 
 		// Before generating any new files, remove any previously-created files.
 		clean: {
-			tests: ['tmp', 'tasks', 'lib']
+			tests: ['test/tmp', 'tasks', 'lib']
 		},
 
 		// Configuration for unit tests
