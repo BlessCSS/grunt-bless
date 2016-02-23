@@ -9,5 +9,5 @@ npm-debug.log
 *.orig
 
 # grunt-bless files
-tmp
-src
+/test/tmp
+/src

@@ -9,6 +9,6 @@ npm-debug.log
 *.orig
 
 # grunt-bless files
-tmp
-lib
-tasks
+/test/tmp
+/lib
+/tasks
