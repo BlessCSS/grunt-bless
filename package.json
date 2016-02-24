@@ -36,8 +36,10 @@
   },
   "dependencies": {
     "async": "^1.5.0",
+    "babel-runtime": "^6.5.0",
     "bless": "~4.0.0",
-    "chalk": "~1.1.0"
+    "chalk": "~1.1.0",
+    "es6-promise": "^3.1.2"
   },
   "devDependencies": {
     "grunt": ">=0.4.0",
