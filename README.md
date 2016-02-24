@@ -1,4 +1,4 @@
-grunt-bless
+grunt-bless [![Build Status](https://travis-ci.org/BlessCSS/grunt-bless.svg?branch=master)](https://travis-ci.org/BlessCSS/grunt-bless)
 ===========
 
 A grunt module for [Blessing](http://blesscss.com/) your CSS files so they will work in Internet Explorer. This is based on a [pull request](https://github.com/paulyoung/bless.js/pull/11) by Aki Alexandra Nofftz (@akinofftz).
@@ -212,6 +212,9 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 Release History
 ---------------
 
+- **1.0.1**
+	- add babel-runtime to add support for older versions of node
+	- add continous integration
 - **1.0.0**
 	- Update to bless 4.0.0
 	- Clean up the NPM package, thanks @mimiflynn
