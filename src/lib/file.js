@@ -39,7 +39,7 @@ export function imports(options) {
 		let _name = name(options.output, current, options.suffix, EXTENSION);
 
 		if(options.pathType === 'relative'){
-			var splitted = _name.split('/');
+			let splitted = _name.split('/');
 			_name = splitted[splitted.length - 1];
 		}
 		statements += '@import "' + name(options.output, current, options.suffix, EXTENSION) + '";' + options.linefeed;
