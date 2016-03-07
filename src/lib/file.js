@@ -35,11 +35,17 @@ export function imports(options) {
 	let current = options.numFiles - 1,
 		statements = '';
 
-	while (current > 0) {
-		statements += '@import "' + name(options.output, current, options.suffix, EXTENSION) + '";' + options.linefeed;
+    while (current > 0) {
+        let _name = name(options.output, current, options.suffix, EXTENSION);
 
-		current--;
-	}
+        if(options.pathType === 'relative'){
+            var splitted = _name.split('/');
+            _name = splitted[splitted.length - 1];
+        }
+        statements += '@import "' + _name + '";' + options.linefeed;
+
+        current--;
+    }
 
 	return statements;
 }
