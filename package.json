@@ -31,7 +31,6 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "postinstall" : "npm install && grunt build",
     "pretest": "grunt",
     "test": "grunt test && grunt --gruntfile ./test/Gruntfile.js -v"
   },
