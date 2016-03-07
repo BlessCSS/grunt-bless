@@ -124,15 +124,17 @@ module.exports = function(grunt) {
 					header += options.banner + grunt.util.linefeed;
 				}
 
-				header += file_utils.imports({
-					numFiles: filesLength,
-					output: outPutfileName,
-					suffix: suffix,
-					linefeed: (options.compress ? '' : grunt.util.linefeed),
-                    pathType: options.pathType
-				});
+				if (options.imports) {
+					header += file_utils.imports({
+						numFiles: filesLength,
+						output: outPutfileName,
+						suffix: suffix,
+						linefeed: (options.compress ? '' : grunt.util.linefeed),
+                        pathType: options.pathType
+					});
 
-				header += grunt.util.linefeed;
+					header += grunt.util.linefeed;
+				}
 
 				// The main file is always the last one in the array.
 				// So add the header here before we iterate.
