@@ -35,7 +35,8 @@ module.exports = function(grunt) {
 				imports: true,
 				failOnLimit: false,
 				suffix: DEFAULT_SUFFIX,
-				sourceMaps: false
+				sourceMaps: false,
+                rootPath:''
 			});
 
 		//grunt.log.writeflags(options, 'options');
@@ -130,7 +131,7 @@ module.exports = function(grunt) {
 						output: outPutfileName,
 						suffix: suffix,
 						linefeed: (options.compress ? '' : grunt.util.linefeed),
-                        pathType: options.pathType
+                        rootPath: options.rootPath
 					});
 
 					header += grunt.util.linefeed;
