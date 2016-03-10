@@ -37,10 +37,9 @@ export function imports(options) {
 
     while (current > 0) {
         let _name = name(options.output, current, options.suffix, EXTENSION),
-            _splitted = _name.split('/'),
-            _rootPath = options.rootPath || '';
+            _splitted = _name.split('/');
         _name = _splitted[_splitted.length - 1];
-        statements += '@import "' + _rootPath + _name + '";' + options.linefeed;
+        statements += '@import "' + options.rootPath + _name + '";' + options.linefeed;
 
         current--;
     }
