@@ -35,14 +35,14 @@ export function imports(options) {
 	let current = options.numFiles - 1,
 		statements = '';
 
-    while (current > 0) {
-        let _name = name(options.output, current, options.suffix, EXTENSION),
-            _splitted = _name.split('/');
-        _name = _splitted[_splitted.length - 1];
-        statements += '@import "' + options.rootPath + _name + '";' + options.linefeed;
+	while (current > 0) {
+		let _name = name(options.output, current, options.suffix, EXTENSION),
+			_splitted = _name.split('/');
+		_name = _splitted[_splitted.length - 1];
+		statements += '@import "' + options.rootPath + _name + '";' + options.linefeed;
 
-        current--;
-    }
+		current--;
+	}
 
 	return statements;
 }
