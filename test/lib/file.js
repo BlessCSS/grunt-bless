@@ -23,6 +23,12 @@ describe('A library of file utilities', function () {
 			assert.equal('base.suffix-1.ext', filename);
 		});
 
+		it('should return a path that is relative to the stylesheet not the root', function () {
+			var filename = file_utils.name('tmp/' + FILE_BASE, 1, FILE_SUFFIX, FILE_EXTENSION);
+
+			assert.equal('base.suffix-1.ext', filename);
+		});
+
 		it('should throw an error if file number is negative', function () {
 			assert.throws(function () {
 				file_utils.name(FILE_BASE, -1, FILE_SUFFIX, FILE_EXTENSION);
