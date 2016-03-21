@@ -11,7 +11,7 @@ describe('A library of file utilities', function () {
 			FILE_SUFFIX = 'suffix-',
 			FILE_EXTENSION = 'ext';
 
-		it('should return a file name with no suffix when its the fist file', function () {
+		it('should return a file name with no suffix when its the first file', function () {
 			var filename = file_utils.name(FILE_BASE, 0, FILE_SUFFIX, FILE_EXTENSION);
 
 			assert.equal('base.ext', filename);
@@ -19,12 +19,6 @@ describe('A library of file utilities', function () {
 
 		it('should return a file name with a suffix when its not the first file', function () {
 			var filename = file_utils.name(FILE_BASE, 1, FILE_SUFFIX, FILE_EXTENSION);
-
-			assert.equal('base.suffix-1.ext', filename);
-		});
-
-		it('should return a path that is relative to the stylesheet not the root', function () {
-			var filename = file_utils.name('tmp/' + FILE_BASE, 1, FILE_SUFFIX, FILE_EXTENSION);
 
 			assert.equal('base.suffix-1.ext', filename);
 		});
@@ -64,6 +58,47 @@ describe('A library of file utilities', function () {
 			var base = file_utils.strip_extension(FILE_NAME_OTHER_MULTI);
 
 			assert.equal('base.css.ext', base);
+		});
+	});
+
+	describe('A function that generate a list of imports', function () {
+		var FILE_BASE = 'base',
+			FILE_SUFFIX = 'suffix-';
+
+		it('should return no imports if the file is not split', function () {
+			var filename = file_utils.imports({
+				'numFiles': 1,
+				'output': FILE_BASE,
+				'suffix': FILE_SUFFIX,
+				'root': '',
+				'linefeed': '\n'
+			});
+
+			assert.equal('', filename);
+		});
+
+		it('should return imports that are relative to the stylesheet not the root', function () {
+			var filename = file_utils.imports({
+				'numFiles': 2,
+				'output': 'tmp/' + FILE_BASE,
+				'suffix': FILE_SUFFIX,
+				'root': '',
+				'linefeed': '\n'
+			});
+
+			assert.equal('@import "base.suffix-1.css";\n', filename);
+		});
+
+		it('should return imports with a domain and path if a root is specified', function () {
+			var filename = file_utils.imports({
+				'numFiles': 2,
+				'output': FILE_BASE,
+				'suffix': FILE_SUFFIX,
+				'root': '//example.com/example/path/',
+				'linefeed': '\n'
+			});
+
+			assert.equal('@import "//example.com/example/path/base.suffix-1.css";\n', filename);
 		});
 	});
 });

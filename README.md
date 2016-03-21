@@ -85,6 +85,14 @@ Default value: `true`
 Enable or disable the use of `@import` in generated CSS files. This feature was
 added in bless.js 3.0.3.
 
+#### options.root ####
+
+Type: `String`
+Default value: `''`
+
+Add a path or domain to the `@import` statements in the generated CSS files. By
+default the generated CSS files are relative to the output file.
+
 #### options.logCount ####
 
 Type: `Boolean | String`
